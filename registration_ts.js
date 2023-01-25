@@ -1,57 +1,50 @@
-// Import the required modules
+//Registration onto Tipster
+//the process occurs by means of storage of a till number and verification of a user id using an OTP. The user is identified by their phone number entered
+
+
 const axios = require('axios');
 const uuidv4 = require('uuid/v4');
+const firebase = require('firebase');
+const bcrypt = require('bcrypt');
 
-// Define the phone number field and the OTP message
+// Initialize Firebase
+const firebaseConfig = {
+  // your firebase config
+};
+firebase.initializeApp(firebaseConfig);
+const otp_db = firebase.database().ref('otp_db');
+
 const phoneNumberField = document.getElementById('phone-number');
 const otpMessage = 'Your OTP for Tipster registration is: ';
 
-// Define the function to send the OTP
 const sendOTP = async () => {
-    // Get the phone number from the field
-    const phoneNumber = phoneNumberField.value;
+  const phoneNumber = phoneNumberField.value;
+  const otp = generateOTP();
+  const saltRounds = 10;
+  const hashedOtp = await bcrypt.hash(otp, saltRounds);
+  let sentOtp = hashedOtp;
+  const message = `${otpMessage}${otp}`;
 
-    // Generate the OTP
-    const otp = generateOTP();
+  //save the hashed OTP to the Firebase database
+  otp_db.push().set({
+    phoneNumber: phoneNumber,
+    otp: sentOtp
+  });
 
-    // Construct the message to send
-    const message = `${otpMessage}${otp}`;
+  const payload = {
+    profile_code: '12345',
+    messages: [
+      {
+        mobile_number: phoneNumber,
+        message: message,
+        message_ref: uuidv4(),
+        link_id: '12340000'
+      }
+    ],
+    dlr_callback_url: 'https://tipster.digital/regcallback/'
+  };
 
-    // Construct the payload for the Crossgate API
-    const payload = {
-        profile_code: '12345',
-        messages: [
-            {
-                mobile_number: phoneNumber,
-                message: message,
-                message_ref: uuidv4(),
-                link_id: '12340000'
-            }
-        ],
-        dlr_callback_url: 'https://tipster.digital/regcallback/'
-    };
-
-    try {
-        // Send the OTP via the Crossgate API
-        const response = await axios.post('https://crossgate.com/api/send-sms', payload);
-
-        // Handle the response
-        console.log(response);
-    } catch (error) {
-        console.error(error);
-    }
-};
-
-// Define the function to generate the OTP
-const generateOTP = () => {
-    // Generate a random 6-digit number
-    return Math.floor(100000 + Math.random() * 900000);
-};
-
-// Attach the function to the form submission event
-const registrationForm = document.getElementById('registration-form');
-registrationForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    sendOTP();
-});
-
+  try {
+    const response = await axios.post('https://crossgate.com/api/send-sms', payload);
+    console.log(response);
+  } catch (error) {

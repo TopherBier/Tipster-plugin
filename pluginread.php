@@ -1,9 +1,19 @@
 <?php
-/**
-* Tipster-Module for Tipster5.0 - Developed By Christopher Obiero
-* Plugin URI: https://www.tophersolves.org/
-* Description: Test.
-* Version: 1
-* Author: Christopher-Obiero
-* Author URI: https://www.tophersolves.org/
-**/
+
+
+/*
+ * Plugin Name: Tipster
+ * Description: Tipping plugin for till merchants registered on Safaricom. Handles all Tipster registration and transaction. Automated registration and automated tipping prompts.
+ * Author:            Christopher Obiero
+ * Author URI:        https://author.example.com/
+ * Plugin URI:        https://www.tophersolves.org
+ * Description:       Handle the basics with this plugin.
+ * Version:           1.10.3
+
+
+*/
+
+// The below code caters for Tipster functionality
+
+
+

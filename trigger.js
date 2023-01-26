@@ -25,7 +25,7 @@ const triggerTipPrompt = async (tillNumber) => {
 
     // check if the current balance is greater than the previous balance
     if (currentBalance > previousBalance) {
-      // get the associated mobile number for the till
+      // get the associated mobile number for the till ------- Change this to suite for collecting the phone number off transactional information
       const mobileNumberSnapshot = await tillRef.child('mobileNumber').once('value');
       const mobileNumber = mobileNumberSnapshot.val();
 

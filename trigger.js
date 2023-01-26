@@ -1,4 +1,7 @@
+//tipping trigger
+
 const firebase = require('firebase');
+const mpesa = require('mpesa');
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -6,6 +9,7 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const accountBalancesRef = firebase.database().ref('account_balances');
+const phoneNosRef = firebase.database().ref('phone_nos');
 
 // function to trigger the tip prompt
 const triggerTipPrompt = async (tillNumber) => {
@@ -26,12 +30,18 @@ const triggerTipPrompt = async (tillNumber) => {
       const mobileNumber = mobileNumberSnapshot.val();
 
       // trigger the tip prompt to the mobile number
-      // code to trigger the tip prompt
+      const LipaNaMpesaData = {
+        BusinessShortCode: " ",
+        Password: " ",
+        Timestamp: " ",
+        TransactionType: "CustomerPayBillOnline",
+        Amount: " ",
+        PartyA: mobileNumber,
+        PartyB: " ",
+}}
 
-      // update the previous balance in the database
-      await tillRef.update({ firstBalance: currentBalance });
-    }
-  } catch (error) {
-    console.error(error)}
-    }
+}
+
+}
+
 //
